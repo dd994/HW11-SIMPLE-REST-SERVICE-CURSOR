@@ -19,6 +19,12 @@ public class LibraryController {
     @Autowired
     private LibraryActionsImpl libraryActionsImpl;
 
+    @GetMapping("/getAuthors")
+    public List<Author> getAuthors(){ return  libraryActionsImpl.getAuthors(); }
+
+    @GetMapping("/getBooks")
+    public List<Book> getBooks(){ return  libraryActionsImpl.getBooks(); }
+
     @PostMapping("/addAuthor")
     public List<Author> addAuthor(@RequestBody Author author) {
         return libraryActionsImpl.addAuthor(author);
@@ -38,11 +44,14 @@ public class LibraryController {
     public void refreshBook(@PathVariable("idOldBook") int idOldBook, @RequestBody Book newBook) {
         libraryActionsImpl.refreshBook(idOldBook, newBook);
     }
-    @GetMapping("/getSortByGenres")
-    public List<Book> sortBookByGenre(Genre genre) {
+
+    @ResponseBody
+    @GetMapping("/getSortByGenres/{genre}")
+    public List<Book> sortBookByGenre(@PathVariable("genre") String  genre) {
         return  libraryActionsImpl.sortBookByGenre(genre);
     }
 
+    @ResponseBody
     @GetMapping("/getSortByAuthor/{lastname}")
     public List<Book> sortBookByAuthor(@PathVariable("lastname") String authorLastName){
         return  libraryActionsImpl.sortBookByAuthor(authorLastName);

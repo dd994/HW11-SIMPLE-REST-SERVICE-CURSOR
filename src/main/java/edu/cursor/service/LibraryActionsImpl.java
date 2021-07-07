@@ -12,18 +12,28 @@ import java.util.stream.Collectors;
 public class LibraryActionsImpl implements LibraryActions {
 
     private List<Author> authors = new ArrayList<>(Arrays.asList(
-            new Author(1, "A", "B"),
-            new Author(2, "B", "dd"),
-            new Author(3, "B", "dd"),
-            new Author(4, "B", "dd")
+            new Author(1, "Volodymyr", "Malyk"),
+            new Author(2, "Jack", "London"),
+            new Author(3, "Scott", "Walter"),
+            new Author(4, "Pavlo", "Zagrebelniy")
     ));
 
     private List<Book> books = new ArrayList<>(Arrays.asList(
-            new Book(1, 1, "AAAAA", Genre.COMEDY, "dasdasd", 4.8),
-            new Book(2, 1, "AAAAA", Genre.STORY, "dasdasd", 4.8),
-            new Book(3, 3, "AAAAA", Genre.ROMAN, "dasdasd", 4.8),
-            new Book(4, 4, "AAAAA", Genre.DETECTIVE, "dasdasd", 4.8)
+            new Book(1, 1, "Чумацький шлях", Genre.STORY, "У новому історичному романі автор відображає цікаве й своєрідне явище в історії українського народу — чумацтво", 4.8),
+            new Book(2, 2, "Північна Одіссея", Genre.STORY, "Збірник містить оповідання з Північного циклу Джека Лондона. Якось він написав: «Життя коротке, і я хочу взяти від кожного краще, що в ньому є...»", 4.8),
+            new Book(3, 3, "Aйвенго", Genre.ROMAN, "Роман «Айвенго» — один із найкращих творів знаменитого письменника Вальтера Скотта. Цей роман був створений майже двісті років тому, а події, про які йдеться, відбувались у XII столітті.", 4.8),
+            new Book(4, 4, "Попіл снів", Genre.DETECTIVE, "У новорічну ніч на пульт управління саркофагом АЕС вривається невідома жінка в генеральській формі й заявляє, що залишиться тут доти, поки до неї не прибудуть із Києва представники влади.", 4.8)
     ));
+
+    @Override
+    public List<Author> getAuthors(){
+        return  authors;
+    }
+
+    @Override
+    public List<Book> getBooks(){
+        return  books;
+    }
 
     @Override
     public List<Author> addAuthor(Author author) {
@@ -38,9 +48,28 @@ public class LibraryActionsImpl implements LibraryActions {
     }
 
     @Override
-    public List<Book> sortBookByGenre(Genre genre) {
+    public List<Book> sortBookByGenre(String genre) {
+        Genre genreEnum = null;
+        genre.toLowerCase();
+
+        switch (genre){
+            case ("story"):
+                genreEnum = Genre.STORY;
+                break;
+            case ("comedy"):
+                genreEnum = Genre.COMEDY;
+                break;
+            case ("detective"):
+                genreEnum = Genre.DETECTIVE;
+                break;
+            case ("roman"):
+                genreEnum = Genre.ROMAN;
+                break;
+        }
+
+        Genre finalGenreEnum = genreEnum;
         return books.stream()
-                .filter(book -> book.getGenre().equals(genre))
+                .filter(book -> book.getGenre().equals(finalGenreEnum))
                 .collect(Collectors.toList());
     }
 
@@ -57,10 +86,15 @@ public class LibraryActionsImpl implements LibraryActions {
 
     @Override
     public List<Book> sortBookByAuthor(String authorLastName) {
-        Author author = (Author) authors.stream()
-                .filter(author1 -> author1.getLName().equalsIgnoreCase(authorLastName));
+        int id= 0;
+        for (Author author: authors) {
+            if (author.getLName().equals(authorLastName)){
+                id = author.getId();
+            }
+        }
+        int finalId = id;
         return books.stream()
-                .filter(book -> book.getAuthorId() == author.getId())
+                .filter(book -> book.getAuthorId()== finalId)
                 .collect(Collectors.toList());
     }
 

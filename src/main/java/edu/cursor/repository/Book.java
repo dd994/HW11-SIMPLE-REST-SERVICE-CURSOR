@@ -12,5 +12,4 @@ public class  Book {
     private Genre genre;
     private String description;
     private double rate;
-//    private  Author author;
 }
